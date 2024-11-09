@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File System - Restricted Access</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>File System - Restricted Access</h1>
+      <p>Warning: Files may be corrupted.</p>
+    </header>
+
+    <main>
+      <div class="file-system">
+        <div class="file corrupted">File_001.txt</div>
+        <div class="file corrupted">Unknown_File.doc</div>
+        <div class="file corrupted">log_2022.txt</div>
+        <div class="file corrupted">TempFile.jpg</div>
+        <div class="file corrupted">Archive.zip</div>
+        <div class="file correct" onclick="showImage()">Lastknownlocation.jpg</div>
+        <div class="file corrupted">EncryptedFile.mp4</div>
+        <div class="file corrupted">System_File.docx</div>
+      </div>
+
+      <!-- Image display for the correct file -->
+      <div id="image-display" style="display:none;">
+        <img src="Lastknownlocation.jpg" alt="Last Known Location">
+      </div>
+
+      <!-- Scary Room Number Message -->
+      <div id="room-number" style="display:none;">
+        <p>146</p>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function showImage() {
+      document.getElementById('image-display').style.display = 'block';
+
+      // Show room number after a delay for a creepy effect
+      setTimeout(() => {
+        document.getElementById('room-number').style.display = 'block';
+      }, 2000); // 2-second delay for added suspense
+    }
+  </script>
+</body>
+</html>

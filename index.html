@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paranormal Investigation Blog</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <script>
+    // Redirect to login page if user is not authenticated
+    if (localStorage.getItem('authenticated') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <div class="container">
+    <header>
+      <h1>Paranormal Investigation Blog</h1>
+      <p>From ghost hunting to uncovering a terrifying truth... Argie continues the search for Ciddy.</p>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="research-logs.html">Research Logs</a></li>
+        <li><a href="video-evidence.html">Video Evidence</a></li>
+        <li><a href="contact.html">Contact Me</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <section id="about">
+        <h2>About the Blog</h2>
+        <p>Once a simple ghost-hunting blog, now it documents the quest to find Ciddy. She disappeared during an investigation at the Lincoln Art Museum, but I believe I know where she is. I need you to help me find her...</p>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2004 Argie Makkanovic - The search continues...</p>
+    </footer>
+
+    <!-- Distorting Eyeball Button for File Explorer -->
+    <a href="puzzle.html" id="distorting-button" title="Access Hidden Files">
+      <img src="eyeball.png" alt="Eyeball" id="eyeball-image">
+    </a>
+
+    <script>
+      // Distortion effect based on mouse proximity to the eyeball image
+      const eyeballImage = document.getElementById('eyeball-image');
+
+      document.addEventListener('mousemove', (e) => {
+        const rect = eyeballImage.getBoundingClientRect();
+        const distanceX = e.clientX - (rect.left + rect.width / 2);
+        const distanceY = e.clientY - (rect.top + rect.height / 2);
+        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+        // Apply distortion based on distance
+        const scaleAmount = Math.max(0.8, 1.5 - distance / 300); // Scale effect
+        eyeballImage.style.transform = `scale(${scaleAmount}) rotate(${distanceX / 10}deg) skew(${distanceY / 20}deg)`;
+      });
+
+      // Reset distortion when the mouse leaves the eyeball area
+      eyeballImage.addEventListener('mouseleave', () => {
+        eyeballImage.style.transform = 'scale(0.5) rotate(0deg) skew(0deg)';
+      });
+    </script>
+  </div>
+</body>
+</html>
