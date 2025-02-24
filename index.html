@@ -2,69 +2,370 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Paranormal Investigation Blog</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Your Past Self Has Been Categorized</title>
+  <style>
+    /* Global Styles */
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://upload.wikimedia.org/wikipedia/en/2/27/Bliss_%28Windows_XP%29.png') no-repeat center center fixed;
+      background-size: cover;
+      overflow: hidden;
+    }
+    /* Power On Screen */
+    #powerOnScreen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      color: #0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2em;
+      z-index: 1000;
+      cursor: pointer;
+    }
+    /* Desktop Container */
+    .desktop {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    /* Window Styles */
+    .window {
+      position: absolute;
+      background: #fff;
+      border: 2px solid #000;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+      border-radius: 4px;
+    }
+    .window .title-bar {
+      background: #0a64ad;
+      color: #fff;
+      padding: 5px;
+      font-weight: bold;
+      cursor: move;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+    }
+    .window .title-bar .title {
+      margin-left: 5px;
+    }
+    .window .title-bar .close {
+      margin-right: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .window-content {
+      padding: 10px;
+    }
+    /* Progress Window */
+    #progressWindow {
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50%;
+      text-align: center;
+      display: none;
+    }
+    .progress-bar-container {
+      width: 100%;
+      background-color: #ccc;
+      border: 1px solid #000;
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+    .progress-bar {
+      height: 30px;
+      width: 0%;
+      background-color: #00ff00;
+      transition: width 0.5s;
+    }
+    /* Folder Window (Desktop Interface) */
+    #folderWindow {
+      top: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70%;
+      display: none;
+      text-align: center;
+      background: rgba(255,255,255,0.9);
+      border: 2px solid #000;
+      padding: 20px;
+    }
+    .folder {
+      display: inline-block;
+      margin: 20px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .folder img {
+      width: 80px;
+      height: auto;
+    }
+    .folder span {
+      display: block;
+      margin-top: 5px;
+      font-weight: bold;
+    }
+    .close-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #c0c0c0;
+      border: 1px solid #000;
+      color: #000;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 3px;
+    }
+    /* Modal Window for Folder Details */
+    #modalWindow {
+      top: 25%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50%;
+      display: none;
+    }
+    /* Final Message Window */
+    #finalMessage {
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50%;
+      display: none;
+      text-align: center;
+      background: #fff;
+      border: 2px solid #000;
+      padding: 30px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+    }
+    /* Taskbar */
+    .taskbar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background: #c0c0c0;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      border-top: 2px solid #fff;
+    }
+    .start-button {
+      background: #0a64ad;
+      border: 1px solid #000;
+      color: #fff;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    /* Glitch Effect */
+    @keyframes glitchEffect {
+      0% { clip: rect(20px, 9999px, 20px, 0); transform: translate(0); }
+      20% { clip: rect(50px, 9999px, 10px, 0); transform: translate(-5px, 5px); }
+      40% { clip: rect(80px, 9999px, 20px, 0); transform: translate(5px, -5px); }
+      60% { clip: rect(20px, 9999px, 50px, 0); transform: translate(-5px, 5px); }
+      80% { clip: rect(50px, 9999px, 80px, 0); transform: translate(5px, -5px); }
+      100% { clip: rect(20px, 9999px, 20px, 0); transform: translate(0); }
+    }
+    .glitch-effect {
+      animation: glitchEffect 0.5s infinite;
+      filter: brightness(0.8) contrast(1.2);
+    }
+  </style>
 </head>
 <body>
-  <script>
-    // Redirect to login page if user is not authenticated
-    if (localStorage.getItem('authenticated') !== 'true') {
-      window.location.href = 'login.html';
-    }
-  </script>
+  <div class="desktop">
+    <!-- Power On Screen -->
+    <div id="powerOnScreen">
+      Click to Power On
+    </div>
 
-  <div class="container">
-    <header>
-      <h1>Paranormal Investigation Blog</h1>
-      <p>From ghost hunting to uncovering a terrifying truth... Argie continues the search for Ciddy.</p>
-    </header>
+    <!-- Progress Window -->
+    <div id="progressWindow" class="window">
+      <div class="title-bar">
+        <div class="title">Cluster Analysis</div>
+      </div>
+      <div class="window-content">
+        <h1>CLUSTER ANALYSIS IN PROGRESS...</h1>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <p id="progressText">0%</p>
+      </div>
+    </div>
 
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="research-logs.html">Research Logs</a></li>
-        <li><a href="video-evidence.html">Video Evidence</a></li>
-        <li><a href="contact.html">Contact Me</a></li>
-      </ul>
-    </nav>
+    <!-- Folder Window (Desktop Interface) -->
+    <div id="folderWindow" class="window">
+      <div class="title-bar">
+        <div class="title">My Computer</div>
+      </div>
+      <div class="window-content">
+        <h1>Your entire existence has been categorized.</h1>
+        <div class="folder" data-folder="financial">
+          <img src="https://static.wikia.nocookie.net/logopedia/images/e/ea/Windows_XP_folder.png/revision/latest/scale-to-width-down/200?cb=20240414041306" alt="Folder Icon">
+          <span>Financial Regrets</span>
+        </div>
+        <div class="folder" data-folder="searches">
+          <img src="https://static.wikia.nocookie.net/logopedia/images/e/ea/Windows_XP_folder.png/revision/latest/scale-to-width-down/200?cb=20240414041306" alt="Folder Icon">
+          <span>Questionable Internet Searches</span>
+        </div>
+        <div class="folder" data-folder="secrets">
+          <img src="https://static.wikia.nocookie.net/logopedia/images/e/ea/Windows_XP_folder.png/revision/latest/scale-to-width-down/200?cb=20240414041306" alt="Folder Icon">
+          <span>Things You Thought No One Saw</span>
+        </div>
+        <div class="folder" data-folder="predictions">
+          <img src="https://static.wikia.nocookie.net/logopedia/images/e/ea/Windows_XP_folder.png/revision/latest/scale-to-width-down/200?cb=20240414041306" alt="Folder Icon">
+          <span>Future Predictions (BETA)</span>
+        </div>
+        <br>
+        <button class="close-button" id="closeBtn">Close Program</button>
+      </div>
+    </div>
 
-    <main>
-      <section id="about">
-        <h2>About the Blog</h2>
-        <p>Once a simple ghost-hunting blog, now it documents the quest to find Ciddy. She disappeared during an investigation at the Lincoln Art Museum, but I believe I know where she is. I need you to help me find her...</p>
-      </section>
-    </main>
+    <!-- Modal Window for Folder Details -->
+    <div id="modalWindow" class="window">
+      <div class="title-bar">
+        <div class="title" id="modalTitle">Folder Details</div>
+        <div class="close" id="modalCloseIcon">X</div>
+      </div>
+      <div class="window-content" id="modalContent">
+        <!-- Folder details will be inserted here -->
+      </div>
+    </div>
 
-    <footer>
-      <p>&copy; 2004 Argie Makkanovic - The search continues...</p>
-    </footer>
+    <!-- Final Message Window -->
+    <div id="finalMessage" class="window">
+      <div class="title-bar">
+        <div class="title">System Message</div>
+      </div>
+      <div class="window-content">
+        <h1>Your future self has requested this analysis.</h1>
+        <h2>You will understand why... soon.</h2>
+      </div>
+    </div>
 
-    <!-- Distorting Eyeball Button for File Explorer -->
-    <a href="puzzle.html" id="distorting-button" title="Access Hidden Files">
-      <img src="eyeball.png" alt="Eyeball" id="eyeball-image">
-    </a>
-
-    <script>
-      // Distortion effect based on mouse proximity to the eyeball image
-      const eyeballImage = document.getElementById('eyeball-image');
-
-      document.addEventListener('mousemove', (e) => {
-        const rect = eyeballImage.getBoundingClientRect();
-        const distanceX = e.clientX - (rect.left + rect.width / 2);
-        const distanceY = e.clientY - (rect.top + rect.height / 2);
-        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-
-        // Apply distortion based on distance
-        const scaleAmount = Math.max(0.8, 1.5 - distance / 300); // Scale effect
-        eyeballImage.style.transform = `scale(${scaleAmount}) rotate(${distanceX / 10}deg) skew(${distanceY / 20}deg)`;
-      });
-
-      // Reset distortion when the mouse leaves the eyeball area
-      eyeballImage.addEventListener('mouseleave', () => {
-        eyeballImage.style.transform = 'scale(0.5) rotate(0deg) skew(0deg)';
-      });
-    </script>
+    <!-- Taskbar -->
+    <div class="taskbar">
+      <div class="start-button">Start</div>
+    </div>
   </div>
+
+  <script>
+    // Get references to DOM elements
+    const powerOnScreen = document.getElementById("powerOnScreen");
+    const progressWindow = document.getElementById("progressWindow");
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+    const folderWindow = document.getElementById("folderWindow");
+    const modalWindow = document.getElementById("modalWindow");
+    const modalContent = document.getElementById("modalContent");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalCloseIcon = document.getElementById("modalCloseIcon");
+    const finalMessage = document.getElementById("finalMessage");
+    const closeBtn = document.getElementById("closeBtn");
+
+    // Power On: Wait for user click to start the simulation
+    powerOnScreen.addEventListener("click", function() {
+      powerOnScreen.style.display = "none";  // Hide the power-on screen
+      progressWindow.style.display = "block";  // Show progress window
+      updateProgress();  // Begin the progress bar animation
+    });
+
+    // Animate progress bar from 0% to 100%
+    let progress = 0;
+    function updateProgress() {
+      progress += 1;
+      progressBar.style.width = progress + "%";
+      progressText.textContent = progress + "%";
+      if (progress < 100) {
+        setTimeout(updateProgress, 50);
+      } else {
+        // After progress completes, hide progress window and show folder window (desktop interface)
+        progressWindow.style.display = "none";
+        folderWindow.style.display = "block";
+      }
+    }
+
+    // Handle folder clicks
+    document.querySelectorAll(".folder").forEach(folder => {
+      folder.addEventListener("click", function() {
+        const folderType = this.getAttribute("data-folder");
+        modalWindow.style.display = "block";
+        // Clear previous content
+        modalContent.innerHTML = "";
+        // Set modal title and content based on folder type
+        switch(folderType) {
+          case "financial":
+            modalTitle.textContent = "Financial Regrets";
+            modalContent.innerHTML = "<p>Timeline of your worst purchases:</p><ul><li>$200 Candle Purchase</li></ul>";
+            break;
+          case "searches":
+            modalTitle.textContent = "Questionable Internet Searches";
+            modalContent.innerHTML = "<ul><li>Can you survive on just bread and water?</li><li>Why do pigeons walk so weird?</li><li>How to tell if your microwave is mad at you?</li></ul>";
+            break;
+          case "secrets":
+            modalTitle.textContent = "Things You Thought No One Saw";
+            modalContent.innerHTML = "<p>Security Cam Footage:<br><em>[Video of you dancing in a grocery store aisle]</em></p>";
+            break;
+          case "predictions":
+            modalTitle.textContent = "Future Predictions (BETA)";
+            modalContent.innerHTML = "<p id='countdown'>Your habits suggest you will order Taco Bell in 3... 2... 1...</p>";
+            startCountdown();
+            break;
+          default:
+            modalTitle.textContent = "Folder Details";
+            modalContent.innerHTML = "<p>Unknown folder.</p>";
+        }
+      });
+    });
+
+    // Countdown for Future Predictions
+    function startCountdown() {
+      let count = 3;
+      const countdownElem = document.getElementById("countdown");
+      const interval = setInterval(() => {
+        countdownElem.textContent = "Your habits suggest you will order Taco Bell in " + count + "...";
+        count--;
+        if (count < 0) {
+          clearInterval(interval);
+          countdownElem.textContent = "Taco Bell order confirmed!";
+        }
+      }, 1000);
+    }
+
+    // Modal close button event
+    modalCloseIcon.addEventListener("click", function() {
+      modalWindow.style.display = "none";
+    });
+
+    // Close Program button event with glitch effect
+    closeBtn.addEventListener("click", function() {
+      // Apply glitch effect class to folder window
+      folderWindow.classList.add("glitch-effect");
+      // Also, you can optionally glitch the entire desktop:
+      // document.querySelector('.desktop').classList.add("glitch-effect");
+      // Wait 2 seconds then show final message
+      setTimeout(function() {
+        folderWindow.style.display = "none";
+        modalWindow.style.display = "none";
+        finalMessage.style.display = "block";
+      }, 2000);
+    });
+
+    // Optional: Prevent default close/reload actions
+    window.onbeforeunload = function() {
+      return "Are you sure you want to leave?";
+    };
+  </script>
 </body>
 </html>
