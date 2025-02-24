@@ -67,6 +67,13 @@
     .window-content {
       padding: 10px;
     }
+    /* Reduced enlarged text for modal window */
+    #modalWindow .window-content,
+    #modalWindow .window-content p,
+    #modalWindow .window-content ul,
+    #modalWindow .window-content li {
+      font-size: 1.5em;
+    }
     /* Progress Window */
     #progressWindow {
       top: 20%;
@@ -134,6 +141,20 @@
       transform: translateX(-50%);
       width: 50%;
       display: none;
+    }
+    /* Animation for opening folders */
+    .open-folder {
+      animation: openFolder 0.5s ease-out;
+    }
+    @keyframes openFolder {
+      0% {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
     /* Final Message Window */
     #finalMessage {
@@ -301,13 +322,18 @@
       folder.addEventListener("click", function() {
         const folderType = this.getAttribute("data-folder");
         modalWindow.style.display = "block";
+        // Remove and re-add animation class for each open
+        modalWindow.classList.remove("open-folder");
+        void modalWindow.offsetWidth; // trigger reflow
+        modalWindow.classList.add("open-folder");
         // Clear previous content
         modalContent.innerHTML = "";
         // Set modal title and content based on folder type
         switch(folderType) {
           case "financial":
             modalTitle.textContent = "Financial Regrets";
-            modalContent.innerHTML = "<p>Timeline of your worst purchases:</p><ul><li>$200 Candle Purchase</li></ul>";
+            modalContent.innerHTML = "<p>Timeline of your worst purchases:</p><ul><li>$200 Candle Purchase</li></ul>" +
+                                      "<img src='https://m.media-amazon.com/images/I/51R6qeYiNML._AC_UF894,1000_QL80_.jpg' alt='200$ Candle' style='width:150px; height:auto;'/>";
             break;
           case "searches":
             modalTitle.textContent = "Questionable Internet Searches";
@@ -315,7 +341,7 @@
             break;
           case "secrets":
             modalTitle.textContent = "Things You Thought No One Saw";
-            modalContent.innerHTML = "<p>Security Cam Footage:<br><em>[Video of you dancing in a grocery store aisle]</em></p>";
+            modalContent.innerHTML = "<video src='dancing.mp4' controls autoplay style='width:100%; max-width:400px;'></video>";
             break;
           case "predictions":
             modalTitle.textContent = "Future Predictions (BETA)";
@@ -329,14 +355,16 @@
       });
     });
 
-    // Countdown for Future Predictions
+    // Countdown for Future Predictions with reduced enlarged text
     function startCountdown() {
       let count = 3;
       const countdownElem = document.getElementById("countdown");
+      countdownElem.style.fontSize = "2em";  // Reduced from previous 3em to 2em
       const interval = setInterval(() => {
-        countdownElem.textContent = "Your habits suggest you will order Taco Bell in " + count + "...";
-        count--;
-        if (count < 0) {
+        if(count > 0) {
+          countdownElem.textContent = "Your habits suggest you will order Taco Bell in " + count + "...";
+          count--;
+        } else {
           clearInterval(interval);
           countdownElem.textContent = "Taco Bell order confirmed!";
         }
@@ -352,8 +380,6 @@
     closeBtn.addEventListener("click", function() {
       // Apply glitch effect class to folder window
       folderWindow.classList.add("glitch-effect");
-      // Also, you can optionally glitch the entire desktop:
-      // document.querySelector('.desktop').classList.add("glitch-effect");
       // Wait 2 seconds then show final message
       setTimeout(function() {
         folderWindow.style.display = "none";
